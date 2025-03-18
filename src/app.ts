@@ -7,15 +7,10 @@ const port:number=4000
 
 import "./database/connection"
 
-app.get("/",(req:Request,res:Response)=>{
-    res.send("hello world")
-})
-app.get("/about",(req:Request,res:Response)=>{
-    res.send("about")
-})
-app.get("/contact",(req:Request,res:Response)=>{
-    res.send("contact page")
-})
+import userRoute from "./routes/userRoute"
+app.use(express.json())
+
+app.use("/",userRoute)
 
 app.listen(port,()=>{
     console.log("server running at ",port)
