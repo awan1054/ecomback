@@ -8,8 +8,9 @@ const port:number=4000
 import "./database/connection"
 
 import userRoute from "./routes/userRoute"
+import adminSeeder from "./adminSeeder"
 app.use(express.json())
-
+adminSeeder()
 app.use("/",userRoute)
 
 app.listen(port,()=>{
