@@ -1,18 +1,21 @@
-import express,{Application,Request,Response} from "express"
+import express, { Application, Request, Response } from "express";
 
-const app:Application=express()
-const port:number=4000
- import * as dotenv from "dotenv"
- dotenv.config()
+const app: Application = express();
+const port: number = 4000;
+import * as dotenv from "dotenv";
+dotenv.config();
 
-import "./database/connection"
+import "./database/connection";
 
-import userRoute from "./routes/userRoute"
-import adminSeeder from "./adminSeeder"
-app.use(express.json())
-adminSeeder()
-app.use("/",userRoute)
+import userRoute from "./routes/userRoute";
+import adminSeeder from "./adminSeeder";
+import productRoute from "./routes/productRoute";
+app.use(express.json());
+adminSeeder();
+app.use("/", userRoute);
+app.use("/admin/product", productRoute);
+app;
 
-app.listen(port,()=>{
-    console.log("server running at ",port)
-})
+app.listen(port, () => {
+  console.log("server running at ", port);
+});
