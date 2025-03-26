@@ -11,11 +11,13 @@ import userRoute from "./routes/userRoute";
 import adminSeeder from "./adminSeeder";
 import productRoute from "./routes/productRoute";
 import categoryController from "./controllers/category.controller";
+
+import categoryRouter from "./routes/CategoryRoute";
 app.use(express.json());
 adminSeeder();
 app.use("/", userRoute);
 app.use("/admin/product", productRoute);
-app;
+app.use("/admin/category", categoryRouter);
 
 app.listen(port, () => {
   categoryController.seedCategory();
