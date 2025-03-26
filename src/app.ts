@@ -10,6 +10,7 @@ import "./database/connection";
 import userRoute from "./routes/userRoute";
 import adminSeeder from "./adminSeeder";
 import productRoute from "./routes/productRoute";
+import categoryController from "./controllers/category.controller";
 app.use(express.json());
 adminSeeder();
 app.use("/", userRoute);
@@ -17,5 +18,6 @@ app.use("/admin/product", productRoute);
 app;
 
 app.listen(port, () => {
+  categoryController.seedCategory();
   console.log("server running at ", port);
 });
