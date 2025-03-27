@@ -45,7 +45,7 @@ class CategoryController {
     const data = await Category.findAll();
     res.status(200).json({
       message: "Category fetched",
-      data,
+      data: data,
     });
   }
 

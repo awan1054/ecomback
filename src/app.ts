@@ -10,16 +10,16 @@ import "./database/connection";
 import userRoute from "./routes/userRoute";
 import adminSeeder from "./adminSeeder";
 import productRoute from "./routes/productRoute";
-import categoryController from "./controllers/category.controller";
-
 import categoryRouter from "./routes/CategoryRoute";
+import cartRouter from "./routes/CartRoute";
 app.use(express.json());
 adminSeeder();
 app.use("/", userRoute);
 app.use("/admin/product", productRoute);
 app.use("/admin/category", categoryRouter);
+app.use("/customer/cart", cartRouter);
 
 app.listen(port, () => {
-  categoryController.seedCategory();
+  // categoryController.seedCategory();
   console.log("server running at ", port);
 });
