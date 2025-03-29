@@ -2,7 +2,16 @@ import { Request, Response } from "express";
 import { AuthRequest } from "../middleware/authMiddleware";
 import Cart from "../database/models/Cart";
 import Product from "../database/models/Product";
+import Category from "../database/models/category";
 
+interface CartData {
+  id: string | null;
+  quantity: number | null;
+  createdAt: string | null;
+  upadatedAt: string | null;
+  userId: string | null;
+  ProductId: string | null;
+}
 class CartController {
   async addToCart(req: AuthRequest, res: Response): Promise<void> {
     const userId = req.user?.id;
@@ -46,6 +55,12 @@ class CartController {
       },
       include: {
         model: Product,
+        include: [
+          {
+            model: Category,
+            attributes: ["id", "categoryName"],
+          },
+        ],
       },
     });
     if (cartItems.length == 0) {
@@ -56,6 +71,59 @@ class CartController {
       res.status(202).json({
         message: "Cart items fetched successfully",
         data: cartItems,
+      });
+    }
+  }
+
+  async deleteMyCartItem(req: AuthRequest, res: Response): Promise<void> {
+    const userId = req.user?.id;
+    const { ProductId } = req.params;
+    // check whether above ProductId exist or not
+    const product = await Product.findByPk(ProductId);
+    if (!ProductId) {
+      res.status(404).json({
+        message: "No Product with that id",
+      });
+      return;
+    }
+
+    //delete the productId
+    Cart.destroy({
+      where: {
+        userId,
+        ProductId,
+      },
+    });
+    res.status(200).json({
+      message: "Product of cart dleted successfully",
+    });
+  }
+
+  async updateCartItem(req: AuthRequest, res: Response): Promise<void> {
+    const { ProductId } = req.params;
+    const userId = req.user?.id;
+    const { quantity } = req.body;
+    if (!quantity) {
+      res.status(404).json({
+        message: "please provide quantity",
+      });
+      return;
+    }
+    const cartData = await Cart.findOne({
+      where: {
+        userId,
+        ProductId,
+      },
+    });
+    if (cartData) {
+      cartData.quantity = quantity;
+      await cartData?.save();
+      res.status(200).json({
+        message: "Product of cart updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        message: "No Productid of that userId",
       });
     }
   }
